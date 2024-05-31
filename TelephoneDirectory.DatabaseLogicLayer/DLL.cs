@@ -16,7 +16,7 @@ namespace TelephoneDirectory.DatabaseLogicLayer
 
         public DLL()
         {
-            sqlConnection = new SqlConnection("Server=DESKTOP-SPA75NF\\SQLEXPRESS;Database=phoneBook;User Id=sa;Password=12345");
+            sqlConnection = new SqlConnection("Server=;Database=;User Id=;Password=");
         }
 
         public void ConnectionSet()
