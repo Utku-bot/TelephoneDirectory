@@ -19,5 +19,10 @@ namespace TelephoneDirectory.Entities
         public string address { get; set; }
         public string description { get; set; }
 
+        public override string ToString()
+        {
+            return $"{name} {surname}";
+        }
+
     }
 }

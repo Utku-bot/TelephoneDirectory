@@ -16,7 +16,7 @@ namespace TelephoneDirectory.DatabaseLogicLayer
 
         public DLL()
         {
-            sqlConnection = new SqlConnection("Server=DESKTOP-SPA75NF\\SQLEXPRESS;Database=phoneBook;User Id=sa;Password=1234");
+            sqlConnection = new SqlConnection("Server=DESKTOP-SPA75NF\\SQLEXPRESS;Database=phoneBook;User Id=sa;Password=12345");
         }
 
         public void ConnectionSet()
@@ -61,7 +61,7 @@ namespace TelephoneDirectory.DatabaseLogicLayer
             {
                 cmd = new SqlCommand("insert into Directory (ID,PersonName,PersonSurname,PhoneNumberI,PhoneNumberII,PhoneNumberIII,EmailAddress,WebAddress,Addresss,Descriptions) " +
                     "values(@ID,@PersonName,@PersonSurname,@PhoneNumberI,@PhoneNumberII,@PhoneNumberIII,@EmailAddress,@WebAddress,@Addresss,@Descriptions)" +
-                    "");
+                    "",sqlConnection);
                 cmd.Parameters.Add("@ID", System.Data.SqlDbType.UniqueIdentifier).Value = phoneDirectory.ID;
                 cmd.Parameters.Add("@PersonName", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.name;
                 cmd.Parameters.Add("@PersonSurName", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.surname;
@@ -71,6 +71,7 @@ namespace TelephoneDirectory.DatabaseLogicLayer
                 cmd.Parameters.Add("@EmailAddress", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.emailAddress;
                 cmd.Parameters.Add("@WebAddress", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.webAddress;
                 cmd.Parameters.Add("@Descriptions", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.description;
+                cmd.Parameters.Add("@Addresss", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.webAddress;
                 ConnectionSet(); // .Net ile Sql arasındaki bağlantıyı al
               returnValues =  cmd.ExecuteNonQuery(); // Insert sorgusunu Sql'e göndermek için
 
@@ -90,28 +91,27 @@ namespace TelephoneDirectory.DatabaseLogicLayer
         {
             try
             {
-                cmd = new SqlCommand(@"update Directory  name = @name,
-                    surname = @surname,
-                    phoneNumberI = @phoneNumberI,
-                    phoneNumberII = @phoneNumberII,
-                    phoneNumberIII = @phoneNumberIII,
-                    emailAddress = @email,
-                    address = @address,
-                    webAddress = @webAddress,
-                    description = @description where ID =@ID ", sqlConnection);
-                cmd.Parameters.Add("@ID", System.Data.SqlDbType.UniqueIdentifier).Value = phoneDirectory.ID;
+                cmd = new SqlCommand(@"update Directory set PersonName = @PersonName,PersonSurname = @PersonSurname,PhoneNumberI = @PhoneNumberI,PhoneNumberII = @PhoneNumberII,PhoneNumberIII = @PhoneNumberIII,EmailAddress = @EmailAddress,Addresss = @Addresss, Descriptions = @Descriptions where ID =@ID", sqlConnection);
                 cmd.Parameters.Add("@PersonName", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.name;
-                cmd.Parameters.Add("@PersonsurName", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.surname;
+                cmd.Parameters.Add("@PersonSurname", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.surname;
                 cmd.Parameters.Add("@PhoneNumberI", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.phoneNumberI;
                 cmd.Parameters.Add("@PhoneNumberII", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.phoneNumberII;
                 cmd.Parameters.Add("@PhoneNumberIII", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.phoneNumberIII;
                 cmd.Parameters.Add("@EmailAddress", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.emailAddress;
                 cmd.Parameters.Add("@WebAddress", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.webAddress;
+                cmd.Parameters.Add("@Addresss", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.address;
+
                 cmd.Parameters.Add("@Descriptions", System.Data.SqlDbType.NVarChar).Value = phoneDirectory.description;
+                cmd.Parameters.Add("@ID", System.Data.SqlDbType.UniqueIdentifier).Value = phoneDirectory.ID;
+
                 ConnectionSet(); // .Net ile Sql arasındaki bağlantıyı al
                 returnValues = cmd.ExecuteNonQuery(); // Insert sorgusunu Sql'e göndermek için
 
             }
+
+
+
+
             catch (Exception)
             {
                 throw;
@@ -147,7 +147,7 @@ namespace TelephoneDirectory.DatabaseLogicLayer
 
         public SqlDataReader RecordList()
         {
-            cmd = new SqlCommand("Select * frrom PhoneBook",sqlConnection);
+            cmd = new SqlCommand("Select * from Directory",sqlConnection);
             ConnectionSet();
             return cmd.ExecuteReader();
             }
@@ -155,7 +155,7 @@ namespace TelephoneDirectory.DatabaseLogicLayer
 
         public SqlDataReader RecordById(Guid id)
         {
-            cmd = new SqlCommand("Select * frrom PhoneBook where ID = @ID", sqlConnection);
+            cmd = new SqlCommand("Select * from Directory where ID = @ID", sqlConnection);
             cmd.Parameters.Add("@ID",System.Data.SqlDbType.UniqueIdentifier).Value = id;
             ConnectionSet();
             return cmd.ExecuteReader();
